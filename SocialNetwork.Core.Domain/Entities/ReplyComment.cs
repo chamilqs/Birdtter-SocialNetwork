@@ -7,7 +7,6 @@ namespace SocialNetwork.Core.Domain.Entities
         public string Content { get; set; }
         public int CommentId { get; set; }
         public Comment? Comment { get; set; }
-        public int UserId { get; set; }
-        public User? User { get; set; }
+        public string UserId { get; set; }
     }
 }

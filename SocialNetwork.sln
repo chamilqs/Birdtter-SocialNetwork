@@ -23,7 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Infrastucture
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Infrastructure.Shared", "SocialNetwork.Infrastructure.Shared\SocialNetwork.Infrastructure.Shared.csproj", "{2B0496C2-2445-482F-BFFB-035F74F907B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Infrastructure.Identity", "SocialNetwork.Infrastructure.Identity\SocialNetwork.Infrastructure.Identity.csproj", "{CB0B6878-7A7C-4FBE-B4DA-C19A2576B48E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Infrastructure.Identity", "SocialNetwork.Infrastructure.Identity\SocialNetwork.Infrastructure.Identity.csproj", "{CB0B6878-7A7C-4FBE-B4DA-C19A2576B48E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3EDF673-1699-45DD-911E-B1895D5C5162}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

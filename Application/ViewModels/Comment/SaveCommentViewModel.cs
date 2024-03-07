@@ -9,7 +9,7 @@ namespace SocialNetwork.Core.Application.ViewModels.Comment
         [DataType(DataType.Text)]
         public string Content { get; set; }
         [Range(1, int.MaxValue)]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         [Range(1, int.MaxValue)]
         public int PostId { get; set; }
     }

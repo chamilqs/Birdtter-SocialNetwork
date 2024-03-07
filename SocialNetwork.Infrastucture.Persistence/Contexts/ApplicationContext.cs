@@ -1,26 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Core.Domain.Common;
 using SocialNetwork.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SocialNetwork.Infrastructure.Persistence.Contexts
 {
     public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
-
-        public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<ReplyComment> RepliesComment { get; set; }
-        public DbSet<SocialLink> SocialLinks { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -48,14 +38,11 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
 
             #region "Table Names"
 
-            modelBuilder.Entity<User>()
-                .ToTable("Users");
-
             modelBuilder.Entity<Comment>()
                 .ToTable("Comments");
 
-            modelBuilder.Entity<FriendRequest>()
-                .ToTable("FriendRequests");
+            //modelBuilder.Entity<FriendRequest>()
+            //    .ToTable("FriendRequests");
 
             modelBuilder.Entity<Friendship>()
                 .ToTable("Friendships");
@@ -66,21 +53,12 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<ReplyComment>()
                 .ToTable("RepliesComment");
 
-            modelBuilder.Entity<SocialLink>()
-                .ToTable("SocialLinks");
-
             #endregion
 
             #region "Primary Keys"
 
-            modelBuilder.Entity<User>()
-                .HasKey(user => user.Id);
-
             modelBuilder.Entity<Comment>()
                 .HasKey(comment => comment.Id);
-
-            modelBuilder.Entity<FriendRequest>()
-                .HasKey(fr => fr.Id);
 
             modelBuilder.Entity<Friendship>()
                 .HasKey(fs => fs.Id);
@@ -91,36 +69,9 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<ReplyComment>()
                 .HasKey(rc => rc.Id);
 
-            modelBuilder.Entity<SocialLink>()
-                .HasKey(sl => sl.Id);
-
             #endregion
 
             #region "Relationships"
-
-                #region Users
-                modelBuilder.Entity<User>(entity =>
-                    {
-                        // Relaciones
-                        entity.HasMany(u => u.Friends)
-                              .WithOne(u => u.User)
-                              .HasForeignKey(g => g.UserId)
-                              .OnDelete(DeleteBehavior.NoAction);
-                        entity.HasMany(u => u.Comments)
-                              .WithOne(u => u.User)
-                              .HasForeignKey(u => u.UserId)
-                              .OnDelete(DeleteBehavior.NoAction);
-                        entity.HasMany(u => u.Posts)
-                              .WithOne(u => u.User)
-                              .HasForeignKey(u => u.UserId)
-                              .OnDelete(DeleteBehavior.NoAction);
-                        entity.HasMany(u => u.FriendRequests)
-                              .WithOne(u => u.User)
-                              .HasForeignKey(u => u.UserId)
-                              .OnDelete(DeleteBehavior.NoAction);
-
-                    });
-                    #endregion
 
                 #region Posts
                 modelBuilder.Entity<Post>(entity =>
@@ -132,10 +83,10 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
                           .OnDelete(DeleteBehavior.Cascade);
 
                 });
-                #endregion
+            #endregion
 
                 #region Comments
-                modelBuilder.Entity<Comment>(entity =>
+            modelBuilder.Entity<Comment>(entity =>
                 {
                     // Relaciones
                     entity.HasMany(u => u.Replies)
@@ -147,49 +98,19 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
                 #endregion
 
                 #region SocialLinks
-                modelBuilder.Entity<SocialLink>(entity =>
-                {
-                    // Relaciones
-                    entity.HasOne(u => u.User)
-                          .WithOne(u => u.SocialLinks)
-                          .HasForeignKey<SocialLink>(u => u.UserId)
-                          .OnDelete(DeleteBehavior.Cascade);
-                });
+                //modelBuilder.Entity<SocialLink>(entity =>
+                //{
+                //    // Relaciones
+                //    entity.HasOne(u => u.User)
+                //          .WithOne(u => u.SocialLinks)
+                //          .HasForeignKey<SocialLink>(u => u.UserId)
+                //          .OnDelete(DeleteBehavior.Cascade);
+                //});
                 #endregion
 
             #endregion
 
             #region "Property configurations"
-
-                #region Users
-            modelBuilder.Entity<User>(entity => {
-
-                    // Propiedades
-                    entity.Property(u => u.Name)
-                          .IsRequired()
-                          .HasMaxLength(150);
-                    entity.Property(u => u.LastName)
-                          .IsRequired()
-                          .HasMaxLength(150);
-                    entity.Property(u => u.Username)
-                          .IsRequired()
-                          .HasMaxLength(100);
-                    entity.Property(u => u.Email)
-                          .IsRequired();
-                    entity.Property(u => u.EmailConfirmed)
-                          .IsRequired();
-                    entity.Property(u => u.Address)
-                          .HasMaxLength(500);
-                    entity.Property(u => u.Phone)
-                          .IsRequired();
-                    entity.Property(u => u.IsActive)
-                          .IsRequired();
-                    entity.Property(u => u.Password)
-                          .IsRequired();
-
-                });
-
-            #endregion
 
                 #region Comments
                 modelBuilder.Entity<Comment>(entity => {
@@ -205,22 +126,22 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
                     });
             #endregion
 
-                #region FriendRequests
-                modelBuilder.Entity<FriendRequest>(entity => {
+                #region FriendRequests(not used)
+                //modelBuilder.Entity<FriendRequest>(entity => {
 
-                    // Propiedades
-                    entity.Property(fr => fr.SenderId)
-                          .IsRequired();
-                    entity.Property(fr => fr.UserId)
-                          .IsRequired();
-                    entity.Property(fr => fr.FriendRequestStatus)
-                          .IsRequired();
+                //    // Propiedades
+                //    entity.Property(fr => fr.SenderId)
+                //          .IsRequired();
+                //    entity.Property(fr => fr.RecieverId)
+                //          .IsRequired();
+                //    entity.Property(fr => fr.FriendRequestStatus)
+                //          .IsRequired();
 
-                });
+                //});
                 #endregion
 
                 #region Friendships
-                modelBuilder.Entity<Friendship>(entity => {
+            modelBuilder.Entity<Friendship>(entity => {
 
                     // Propiedades
                     entity.Property(fs => fs.UserId)
@@ -241,6 +162,7 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
                     entity.Property(p => p.UserId)
                           .IsRequired();
                     entity.Property(p => p.ImageUrl);
+                    entity.Property(p => p.MediaVideo);
 
                 });
             #endregion
@@ -260,15 +182,15 @@ namespace SocialNetwork.Infrastructure.Persistence.Contexts
                 });
             #endregion
 
-                #region SocialLinks
-            modelBuilder.Entity<SocialLink>(entity => {
+                #region SocialLinks (not used)
+                //modelBuilder.Entity<SocialLink>(entity => {
 
-                // Propiedades
-                entity.Property(sl => sl.UserId)
-                      .IsRequired();
+                //    // Propiedades
+                //    entity.Property(sl => sl.UserId)
+                //          .IsRequired();
 
-            });
-            #endregion
+                //});
+                #endregion
 
             #endregion
 

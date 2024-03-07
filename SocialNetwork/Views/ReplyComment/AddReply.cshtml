@@ -1,0 +1,54 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.ReplyComment
+@using Microsoft.AspNetCore.Http
+@using SocialNetwork.Core.Application.DTOs.Account
+@using SocialNetwork.Core.Application.Helpers;
+@model SaveReplyCommentViewModel
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Añadir respuesta";
+}
+
+
+
+<form method="post" asp-controller="ReplyComment" asp-action="AddReply">
+    <div class="d-flex flex-start w-100 mt-5">
+        <img class="rounded-circle shadow-1-strong me-3"
+             src="@User.ProfilePicture" alt="avatar" width="40"
+             height="40" />
+        <div class="form-outline w-100">
+            <textarea asp-for="Content" name="Content" class="form-control" id="textAreaExample" rows="4"
+                      style="background: #fff;"></textarea>
+            <label class="form-label" for="textAreaExample">Replying to a Comment</label>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+    <input type="hidden" asp-for="CommentId" value="@Model.CommentId" />
+    <input type="hidden" asp-for="Id" value="0" />
+
+    <div class="float-end mt-1 mb-3">
+        <button type="submit" class="btn btn-primary btn-lg">
+            Post reply
+        </button>
+    </div>
+</form>
+<a asp-controller="Home" asp-action="Index">
+    <button type="submit" class="btn float-end mt-1 btn-primary btn-lg" style="margin-right:5px;">
+        Go back
+    </button>
+</a>
+
+<div class="text-danger text-center" id="validationSummary">
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        if ($('#validationSummary').length) {
+            setTimeout(function () {
+                $('#validationSummary').fadeOut('slow');
+            }, 5000);
+        }
+    });
+</script>

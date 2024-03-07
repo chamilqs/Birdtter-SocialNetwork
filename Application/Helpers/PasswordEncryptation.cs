@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SocialNetwork.Core.Application.Helpers
@@ -22,27 +23,29 @@ namespace SocialNetwork.Core.Application.Helpers
             }
         }
 
-        public static bool IsHashed(string input)
+        public static string HashPassword(string password)
         {
-            if (string.IsNullOrEmpty(input))
+            const KeyDerivationPrf Pbkdf2Prf = KeyDerivationPrf.HMACSHA256;
+            const int Pbkdf2IterCount = 10000;
+            const int Pbkdf2SubkeyLength = 256 / 8;
+            const int SaltSize = 128 / 8;
+
+            byte[] salt = new byte[SaltSize];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                return false;
+                rng.GetBytes(salt);
             }
 
-            if (input.Length != 64)
-            {
-                return false;
-            }
+            byte[] subkey = KeyDerivation.Pbkdf2(password, salt, Pbkdf2Prf, Pbkdf2IterCount, Pbkdf2SubkeyLength);
 
-            foreach (char c in input)
-            {
-                if (!Uri.IsHexDigit(c))
-                {
-                    return false;
-                }
-            }
+            byte[] outputBytes = new byte[1 + SaltSize + Pbkdf2SubkeyLength];
+            outputBytes[0] = 0x01; 
+            Buffer.BlockCopy(salt, 0, outputBytes, 1, SaltSize);
+            Buffer.BlockCopy(subkey, 0, outputBytes, 1 + SaltSize, Pbkdf2SubkeyLength);
 
-            return true;
+            return Convert.ToBase64String(outputBytes);
         }
+
+
     }
 }

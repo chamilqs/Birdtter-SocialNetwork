@@ -1,0 +1,364 @@
+﻿@using SocialNetwork.Core.Application.DTOs.Account
+@using SocialNetwork.Core.Application.ViewModels.Comment
+@using SocialNetwork.Core.Application.ViewModels.Friendship
+@using SocialNetwork.Core.Application.Helpers;
+@using SocialNetwork.Core.Application.ViewModels.Post
+@using SocialNetwork.Infrastructure.Identity.Entities;
+@model List<FriendshipViewModel>
+
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Mis amigos";
+}
+<style>
+
+    .tabs {
+        position: relative;
+        width: 100%;
+    }
+
+        .tabs .title {
+            padding: 50px 20px 100px;
+            text-align: center;
+        }
+
+            .tabs .title h2 {
+                font-size: 35px;
+                font-weight: bold;
+                color: #000;
+            }
+
+            .tabs .title p {
+                font-size: 25px;
+                color: #555;
+                margin-top: 15px;
+            }
+
+        .tabs .tab-header,
+        .tabs .tab-indicator,
+        .tabs .tab-body {
+            margin: 0 auto;
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .tabs .tab-header {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            height: 60px;
+            margin-top: -60px;
+            z-index: 2;
+        }
+
+            .tabs .tab-header > div {
+                width: 33.33%;
+                text-align: center;
+                padding: 15px 0px;
+                color: #000;
+                font-size: 18px;
+                cursor: pointer;
+                transition: color 300ms ease-in-out;
+            }
+
+        .tabs .tab-indicator {
+            position: relative;
+            height: 60px;
+            margin-top: -60px;
+        }
+
+            .tabs .tab-indicator > div {
+                position: absolute;
+                left: 0%;
+                width: 33.33%;
+                height: 100%;
+                background: #fff;
+                border-radius: 10px 10px 0px 0px;
+                transition: all 300ms ease-in-out;
+            }
+
+        .tabs .tab-body {
+            position: relative;
+        }
+
+            .tabs .tab-body > div {
+                position: absolute;
+                width: 100%;
+                padding: 20px;
+                opacity: 0;
+            }
+
+                .tabs .tab-body > div > * {
+                    margin: 10px 0px;
+                }
+
+                .tabs .tab-body > div > p {
+                    color: #555;
+                    font-size: 15px;
+                }
+
+                .tabs .tab-body > div.active {
+                    top: 0px;
+                    opacity: 1;
+                    transition: top 0ms ease-in-out 0ms, opacity 500ms ease-in-out 0ms;
+                }
+
+</style>
+<style>
+
+    .header__input {
+        display: flex;
+        align-items: center;
+        background-color: #eff2f5;
+        padding: 10px;
+        margin-left: 10px;
+        border-radius: 999px;
+        margin-bottom: 20px;
+    }
+
+        .header__input input {
+            border: none;
+            background-color: transparent;
+            outline-width: 0;
+        }
+
+    .postCard {
+        border-radius: 15px;
+        margin-top: 20px;
+        width: 100%;
+        box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+    }
+
+    /* post */
+
+    .post {
+        width: 100%;
+        margin-top: 15px;
+        border-radius: 15px;
+        background-color: white;
+        box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+    }
+
+    .post__image img {
+        width: 100%;
+    }
+
+    .post__top {
+        display: flex;
+        position: relative;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .post__avatar {
+        margin-right: 10px;
+    }
+
+    .post__topInfo h3 {
+        font-size: medium;
+    }
+
+    .post__topInfo p {
+        font-size: small;
+        color: gray;
+    }
+
+    .post__bottom {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 15px 25px;
+    }
+
+    @@media (max-width: 768px) {
+
+        .header__input input {
+            display: none;
+        }
+    }
+
+</style>
+
+<div class="tabs">
+    <div class="title">
+        <h2>Friendship Zone</h2>
+        <p>
+            Welcome to the friendship zone, here you can manage your friends, add new friends and see the posts from your friends.
+        </p>
+    </div>
+    <div class="tab-header">
+        <a asp-controller="Friendship" asp-action="Index" title="My friends" style="margin-left:50px; margin-right:50px;" class="no-decoration fs-4 fw-bold">
+            <div>My friends</div>
+        </a>
+        <a asp-controller="Friendship" asp-action="AddFriends" title="My friends" style="margin-left:20px; margin-right:60px;" class="no-decoration fs-4 fw-bold">
+            <div>Add new friends</div>
+        </a>
+        <a asp-controller="Friendship" asp-action="FriendsPosts" title="My friends" class="no-decoration fs-4 fw-bold">
+            <div>My friends posts</div>
+        </a>
+    </div>
+    <div class="tab-indicator">
+        <div></div>
+    </div>
+        <div>
+            @if (Model.Count == 0)
+            {
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 align-content-center">
+                            <h1 class="text-center fs-3 mt-5 mb-4">You don't have any friends.</h1>
+                            <img src="~/Images/sadpepe.png" width="300px" height="160px" style="margin-left:450px;" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="container">
+                    <div class="row">
+                        @foreach (var friend in Model)
+                        {
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-start">
+                                            <img class="rounded-circle shadow-1-strong me-3"
+                                                 src="@friend.FriendProfilePicture" alt="avatar" width="40"
+                                                 height="40" />
+                                            <div>
+                                                <h5 class="card-title">@friend.FriendName @friend.FriendLastName</h5>
+                                                <p class="card-text">@friend.FriendUsername</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        @if (friend.FriendId != User.Id)
+                                        {
+                                            <button class="btn btn-danger" onclick="deleteFriend('@friend.FriendId')">Delete friend</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-danger" onclick="deleteFriend('@friend.UserId')">Delete friend</button>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+        </div>
+</div>
+
+<script>
+    let tabs = document.querySelector(".tabs");
+    let tabHeader = tabs.querySelector(".tab-header");
+    let tabHeaderElements = tabs.querySelectorAll(".tab-header > div");
+    let tabBody = tabs.querySelector(".tab-body");
+    let tabBodyElements = tabs.querySelectorAll(".tab-body > div");
+    let tabIndicator = tabs.querySelector(".tab-indicator > div");
+
+    let activeTabIndex = parseInt(localStorage.getItem('activeTabIndex')) || 0;
+
+    tabHeaderElements[activeTabIndex].classList.add("active");
+    tabBodyElements[activeTabIndex].classList.add("active");
+    tabIndicator.style.left = `${activeTabIndex * 25}%`;
+
+    for (let i = 0; i < tabHeaderElements.length; i++) {
+        tabHeaderElements[i].addEventListener("click", function () {
+            tabHeader.querySelector(".active").classList.remove("active");
+            tabHeaderElements[i].classList.add("active");
+            tabBody.querySelector(".active").classList.remove("active");
+            tabBodyElements[i].classList.add("active");
+            tabIndicator.style.left = `${i * 25}%`;
+
+            // Almacenar el índice del tab activo en localStorage
+            localStorage.setItem('activeTabIndex', i.toString());
+        });
+    }
+</script>
+
+<script>
+    async function deleteFriend(friendId) {
+        try {
+            const response = await fetch(`/Friendship/DeleteFriendship?friendId=${friendId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                // Recargar la página completa después de eliminar un amigo
+                window.location.reload();
+            } else {
+                console.error('Error al eliminar amigo:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error al eliminar amigo:', error);
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        if ($('#validationSummary').length) {
+            setTimeout(function () {
+                $('#validationSummary').fadeOut('slow');
+            }, 5000);
+        }
+    });
+
+    $(document).ready(function () {
+        $('.commentSection').hide();
+
+        $('.toggleCommentSection').click(function (e) {
+            e.preventDefault();
+            $(this).closest('.card').find('.commentSection').slideToggle();
+        });
+
+    });
+
+    $(document).ready(function () {
+        $(document).on('click', '.toggleReplies', function (e) {
+            e.preventDefault();
+            var commentId = $(this).data('comment-id');
+            var repliesContainer = $(this).closest('.d-flex').find('.replies-container');
+
+            var isOpen = repliesContainer.hasClass('open');
+
+            if (isOpen) {
+                repliesContainer.removeClass('open').slideUp();
+            } else {
+                $.ajax({
+                    url: '/ReplyComment/GetReplies',
+                    type: 'GET',
+                    data: { commentId: commentId },
+                    success: function (response) {
+                        repliesContainer.html('');
+                        $.each(response, function (index, reply) {
+                            var replyHtml = `
+                                            <div class="d-flex flex-start align-items-center mt-3">
+                                                <img class="rounded-circle shadow-1-strong me-3" src="${reply.userProfilePicture}" alt="avatar" width="40" height="40" />
+                                                <div>
+                                                    <h6 class="fw-bold text-primary mb-1">from ${reply.userName} ${reply.userLastName}</h6>
+                                                    <p class="text-muted small mb-0">${reply.content}</p>
+                                                </div>
+                                            </div>
+                                        `;
+                            repliesContainer.append(replyHtml);
+                        });
+
+                        repliesContainer.addClass('open').slideDown();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+</script>

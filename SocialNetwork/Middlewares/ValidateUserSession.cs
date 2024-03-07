@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SocialNetwork.Core.Application.DTOs.Account;
 using SocialNetwork.Core.Application.Helpers;
 using SocialNetwork.Core.Application.ViewModels.User;
 
@@ -15,7 +16,7 @@ namespace WebApp.SocialNetwork.Middlewares
 
         public bool HasUser()
         {
-            UserViewModel userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+            AuthenticationResponse userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
             if (userViewModel == null)
             {

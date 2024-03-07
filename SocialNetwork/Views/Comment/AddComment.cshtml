@@ -1,0 +1,36 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Comment
+@using Microsoft.AspNetCore.Http
+@using SocialNetwork.Core.Application.DTOs.Account
+@using SocialNetwork.Core.Application.Helpers;
+@model SaveCommentViewModel
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    // el id del post se pasa desde el controlador
+
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Añadir comentario";
+}
+
+
+<form method="post" asp-controller="Comment" asp-action="AddComment">
+    <div class="d-flex flex-start w-100 mt-5">
+        <img class="rounded-circle shadow-1-strong me-3"
+             src="@User.ProfilePicture" alt="avatar" width="40"
+             height="40" />
+        <div class="form-outline w-100">
+            <textarea asp-for="Content" name="Content" class="form-control" id="textAreaExample" rows="4"
+                      style="background: #fff;"></textarea>
+            <label class="form-label" for="textAreaExample">Comment</label>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
+    <input type="hidden" asp-for="PostId" value="@Model.PostId"/>
+    <input type="hidden" asp-for="Id" value="0"/>
+
+    <div class="float-end mt-1 mb-3">
+        <button type="submit" class="btn btn-primary btn-sm">
+            Post comment
+        </button>
+    </div>
+</form>

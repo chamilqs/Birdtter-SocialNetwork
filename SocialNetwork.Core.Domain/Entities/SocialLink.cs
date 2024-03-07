@@ -13,7 +13,6 @@ namespace SocialNetwork.Core.Domain.Entities
         public string? Website { get; set; }
 
         // Navigation property
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string UserId { get; set; }
     }
 }

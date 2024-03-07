@@ -13,8 +13,11 @@ namespace SocialNetwork.Core.Application
             
             #region Services
             services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ISocialLinkService, SocialLinkService>();
+            services.AddTransient<IUserServiceIdentity, UserServiceIdentity>();
+            services.AddTransient<IPostService, PostService>();
+            services.AddTransient<IFriendshipService, FriendshipService>();
+            services.AddTransient<IReplyCommentService, ReplyCommentService>();
+            services.AddTransient<ICommentService, CommentService>();
             #endregion
         }
     }

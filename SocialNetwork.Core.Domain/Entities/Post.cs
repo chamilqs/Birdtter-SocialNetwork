@@ -6,8 +6,8 @@ namespace SocialNetwork.Core.Domain.Entities
     {
         public string Content { get; set; }
         public string? ImageUrl { get; set; }
-        public int UserId { get; set; }
-        public User? User { get; set; }
+        public string? MediaVideo { get; set; }
+        public string UserId { get; set; }
         public ICollection<Comment>? Comments { get; set; }
     }
 }

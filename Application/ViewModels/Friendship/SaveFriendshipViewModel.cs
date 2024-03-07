@@ -6,8 +6,8 @@ namespace SocialNetwork.Core.Application.ViewModels.Friendship
     {
         public int Id { get; set; }
         [Range(1, int.MaxValue)]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         [Range(1, int.MaxValue)]
-        public int FriendId { get; set; }
+        public string FriendId { get; set; }
     }
 }

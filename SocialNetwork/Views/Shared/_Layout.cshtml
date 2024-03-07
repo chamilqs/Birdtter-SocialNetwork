@@ -1,9 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using SocialNetwork.Core.Application.DTOs.Account
 @using SocialNetwork.Core.Application.Helpers;
 @using SocialNetwork.Core.Application.ViewModels.User
 @inject IHttpContextAccessor httpContextAccessor
 @{
-    var User = httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -144,6 +145,7 @@
         }
     }
 </style>
+
 <body>
     <header>
         <nav>
@@ -153,13 +155,9 @@
 
                     @if (User != null)
                     {
-                        <a asp-controller="@(User!= null ? "Home" : "User")" asp-action="Index">
+                        <a asp-controller="@(User!= null ? "Home" : "User")" asp-action="Index" class="no-decoration">
                             <img src="~/Images/logo2.png" alt="Birdtter" />
                         </a>
-                        <div class="header__input">
-                            <span class="material-icons"> search </span>
-                            <input type="text" style="margin-left:5px;" placeholder="Search Birdtter" />
-                        </div>
                     }
                     else
                     {
@@ -169,25 +167,34 @@
                 </div>
                 @if (User != null)
                 {
-                    <div class="header__middle">
+                    <div class="header__middle" style="margin-left:290px;">
+                        <a asp-controller="Home" asp-action="Index" title="Home" class="header__option active no-decoration">
+                            <div class="header__option" id="homeOption">
 
-                        <div class="header__option active">
-                            <a asp-controller="Home" asp-action="Index" title="Home" class="no-decoration">
                                 <span class="material-icons"> home </span>
-                            </a>
-                        </div>
 
-                        <div class="header__option">
-                            <span class="material-icons"> supervised_user_circle </span>
-                        </div>
+                            </div>
+                        </a>
+                        <a asp-controller="Friendship" asp-action="Index" title="Friends" class="header__option active no-decoration">
+                            <div class="header__option" id="friendsOption">
+
+                                <span class="material-icons"> supervised_user_circle </span>
+
+                            </div>
+                        </a>
                     </div>
-                    <a asp-controller="User" asp-action="MyProfile" title="My Profile" class="no-decoration">
+                    <a asp-controller="UserIdentity" asp-action="Logout" title="Logout" class="no-decoration mt-2 me-3">
+                        <div class="header__right">
+                            <span class="material-icons fs-1"> logout </span>
+                        </div>
+                    </a>
+                    <a asp-controller="UserIdentity" asp-action="MyProfile" title="My Profile" class="no-decoration">
                         <div class="header__right">
                             <div class="header__info">
                                 <img class="user__avatar"
                                      src="@User.ProfilePicture"
                                      alt="" />
-                                <h4>@User.Name @User.LastName</h4>
+                                <h4 style="margin-top:8px;">@User.Name @User.LastName</h4>
                             </div>
                         </div>
                     </a>
@@ -203,10 +210,30 @@
         </main>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Obtén los elementos del navbar
+        var headerOptionElements = document.querySelectorAll('.header__option');
+
+        // Agrega un event listener a cada elemento
+        headerOptionElements.forEach(function (headerOptionElement) {
+            headerOptionElement.addEventListener('click', function () {
+                // Elimina la clase 'active' de todos los elementos
+                headerOptionElements.forEach(function (el) {
+                    el.classList.remove('active');
+                });
+
+                // Agrega la clase 'active' al elemento clickeado
+                this.classList.add('active');
+            });
+        });
+    </script>
+
 </body>
 </html>
 

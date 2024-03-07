@@ -4,6 +4,6 @@ namespace SocialNetwork.Core.Application.Interfaces.Services
 {
     public interface IFriendshipService
     {
-        // Task<List<FriendshipViewModel>> GetAllViewModelWithInclude();
+        Task<SaveFriendshipViewModel> AddFriendship(SaveFriendshipViewModel vm, string friendId);
     }
 }

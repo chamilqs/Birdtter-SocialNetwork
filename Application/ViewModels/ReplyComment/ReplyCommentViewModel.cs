@@ -4,8 +4,8 @@ namespace SocialNetwork.Core.Application.ViewModels.ReplyComment
 {
     public class ReplyCommentViewModel : UserProperties
     {
-        public string Content { get; set; }        
+        public string Content { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public int CommentId { get; set; }
-        public string CommentUserId { get; set; }
     }
 }

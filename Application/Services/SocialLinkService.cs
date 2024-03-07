@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using SocialNetwork.Core.Application.DTOs.Account;
 using SocialNetwork.Core.Application.Helpers;
 using SocialNetwork.Core.Application.Interfaces.Repositories;
 using SocialNetwork.Core.Application.Interfaces.Services;
 using SocialNetwork.Core.Application.ViewModels.SocialLink;
-using SocialNetwork.Core.Application.ViewModels.User;
 using SocialNetwork.Core.Domain.Entities;
 
 namespace SocialNetwork.Core.Application.Services
@@ -14,12 +14,12 @@ namespace SocialNetwork.Core.Application.Services
         private readonly ISocialLinkRepository _socialLinkRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserViewModel userViewModel;
+        private readonly AuthenticationResponse userViewModel;
         public SocialLinkService(ISocialLinkRepository socialrepository, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(socialrepository, mapper)
         {
             _socialLinkRepository = socialrepository;
             _httpContextAccessor = httpContextAccessor;
-            userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+            userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
             _mapper = mapper;
         }
 

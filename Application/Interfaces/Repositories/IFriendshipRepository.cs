@@ -4,5 +4,6 @@ namespace SocialNetwork.Core.Application.Interfaces.Repositories
 {
     public interface IFriendshipRepository : IGenericRepository<Friendship>
     {
+
     }
 }

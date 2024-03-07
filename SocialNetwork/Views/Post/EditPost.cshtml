@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Http
+@using SocialNetwork.Core.Application.DTOs.Account
+@using SocialNetwork.Core.Application.ViewModels.Post
+@using SocialNetwork.Core.Application.Helpers;
+@model SavePostViewModel
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Edit post";
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card-header bg-dark text-light">
+                    <h4 class="text-center">Editing your post</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-danger text-center" id="validationSummary">
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    </div>
+                    <form method="post" asp-controller="Post" asp-action="EditPost" enctype="multipart/form-data">
+
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label">Content of your post: </label>
+                            <input type="text" asp-for="Content" class="form-control" />
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MediaVideo" class="form-label">Media video: </label>
+                            <input type="url" step="any" asp-for="MediaVideo" class="form-control" />
+                            <span asp-validation-for="MediaVideo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="File" class="form-label">Select a file:</label>
+                            <input asp-for="File" class="form-control"/>
+                        </div>
+
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="UserId" />
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Go back</a>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
