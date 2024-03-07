@@ -36,8 +36,8 @@ namespace SocialNetwork.Infrastructure.Identity
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/User";
-                options.AccessDeniedPath = "/User/AccessDenied";
+                options.LoginPath = "/UserIdentity";
+                options.AccessDeniedPath = "/UserIdentity/AccessDenied";
             });
 
             services.AddAuthentication();
