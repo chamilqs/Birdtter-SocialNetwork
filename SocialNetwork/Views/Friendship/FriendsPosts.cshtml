@@ -109,6 +109,110 @@
 </style>
 <style>
 
+    .header__left img {
+        height: 40px;
+    }
+
+    .user__avatar {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+
+    .header {
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        position: sticky;
+        background-color: white;
+        z-index: 100;
+        top: 0;
+        box-shadow: 0 5px 8px -9px rgba(0, 0, 0, 0.75);
+    }
+
+    .header__left {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .header__input {
+        display: flex;
+        align-items: center;
+        background-color: #eff2f5;
+        padding: 10px;
+        margin-left: 10px;
+        border-radius: 999px;
+    }
+
+        .header__input input {
+            border: none;
+            background-color: transparent;
+            outline-width: 0;
+        }
+
+    .header__middle {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .header__option .material-icons {
+        font-size: xx-large;
+        color: gray;
+    }
+
+    .header__option:hover .material-icons {
+        color: #2e81f4;
+    }
+
+    .header__option {
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        cursor: pointer;
+    }
+
+        .header__option.active .material-icons {
+            color: #2e81f4;
+        }
+
+        .header__option.active {
+            border-bottom: 4px solid #2e81f4;
+        }
+
+        .header__option:hover {
+            background-color: #eff2f5;
+            border-radius: 10px;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: none;
+        }
+
+    .header__info {
+        display: flex;
+        align-items: center;
+    }
+
+        .header__info h4 {
+            margin-left: 10px;
+        }
+
+    .header__right {
+        display: flex;
+        align-items: center;
+    }
+
+        .header__right .material-icons {
+            color: gray;
+            margin: 0 10px;
+        }
+
+            .header__right .material-icons:hover {
+                cursor: pointer;
+            }
+
+
     .header__input {
         display: flex;
         align-items: center;
@@ -320,7 +424,7 @@
                                             {
                                                 <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                                                     <p class="text-muted small mb-4 text-center">
-                                                        No hay comentarios
+                                                        No comments yet.
                                                     </p>
                                                 </div>
                                             }
@@ -341,7 +445,7 @@
                     <div class="container mt-3">
                         <div class="row">
                             <div class="col-12">
-                                <h1 class="text-center fs-3 mt-3">You don't have any friends.</h1>
+                                <h1 class="text-center fs-3 mt-3">Nothing to see here.</h1>
                                 <img src="~/Images/sadpepe.png" width="300px" height="160px" class="img-fluid" />
                             </div>
                         </div>
